@@ -25,7 +25,7 @@ class base : public object{public:      int c;      int d;};
 <meta property="og:description" content="1.若派生类公有继承了基类的公有成员：class object{public:      int a;      int b;}; class base : public object{public:      int c;      int d;}; 派生类有三个成员，分别是隐藏的基类对象，c和d。这个隐藏的基类对象包含了基类的成员。 2.派生类方法访问隐藏的基类成员问题：class A{pri">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-19T15:10:39.000Z">
-<meta property="article:modified_time" content="2023-09-19T16:23:23.890Z">
+<meta property="article:modified_time" content="2023-09-19T16:42:23.913Z">
 <meta property="article:author" content="mintleave">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary">
@@ -104,7 +104,15 @@ class base : public object{public:      int c;      int d;};
 <p><strong>派生类的隐藏基类对象和基类作为成员变量的区别：</strong><br>class A<br>{<br>private:<br>       int ax;<br>protected:<br>       int ay;<br>public:<br>       int az;<br>public:<br>       A(){ ax &#x3D; ay &#x3D; az &#x3D; 0; }<br>};</p>
 <p>class B : public A<br>{<br>private:<br>    int bx;<br>    AA aa;<br>protected:<br>    int by;<br>public:<br>    int bz;<br>};</p>
 <p>对于隐藏基类对象，可以访问保护属性和公有属性；<br>对于私有属性的基类对象，可以访问对象的公有属性。<br>可以说：在派生类中，隐藏基类对象是无名的，可以访问除<br>私有属性外的成员而作为私有属性的基类对象，是具有名的，<br>只可访问公有成员。即继承而来的对象和成员对象的差别<br>主要在保护属性上。</p>
-<p><strong>切片现象</strong>（赋值兼容性规则）<br>在公有继承中，派生类对象可以对基类对象进行赋值。</p>
+<p><strong>切片现象</strong>（赋值兼容性规则）<br>在公有继承中，派生类对象可以对基类对象进行赋值。<br>示例；object为基类，Base为派生类<br>class Object<br>{<br>private:<br>       int value;<br>public:<br>       Object(int x &#x3D; 0) : value(x)<br>       {<br>        cout &lt;&lt; “creat Object: &lt;&lt; this &lt;&lt; endl;<br>       }<br>       ~Objet() {cout &lt;&lt; “Destroy Object: “ &lt;&lt; this &lt;&lt; endl;}<br>};</p>
+<p>class Base : public Objet<br>{<br>private:<br>       int num;<br>public:<br>       Base(int x &#x3D; 0) : Object(x + 10),,num(x)<br>       {<br>        cout &lt;&lt; “creat Base: “ &lt;&lt; this &lt;&lt; endl;<br>       }<br>       ~Base() {cout &lt;&lt; “destroy Base: “ &lt;&lt; this &lt;&lt; endl; }<br>};</p>
+<p>int main()<br>{<br>    Object obj(10);<br>    Base base(20);</p>
+<pre><code>obj = base;
+
+return 0;
+</code></pre>
+<p>}</p>
+<p>因为公有继承是<strong>is-a</strong>的关系，所以：<br>派生类其对象可以对基类对象赋值，但赋值时<br>是拿派生类里面的隐藏基类对象成员对其赋值，<br>这种情况叫做<strong>切片现象</strong>。</p>
 
       
     </div><!-- .entry-content -->
